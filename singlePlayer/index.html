@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+ <!-- data creazione: 27.05.2022  data ultima modifica: 15.06.2022-->
+ <!-- O.S. = Windows/Linux/MAC Browser = opera gx -->
+ <!-- Pac-Man -->
+ <title>Pac-Man</title>
+ <meta charset="UTF-8">
+ <meta name="description" content="Michael Dobeson">
+ <meta name="keywords" content="HTML/CSS/JavaScript/Pac-Man">
+ <meta name="author" content="Michael.Dobeson">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="icon" href="img/pac-man.gif" type="image" sizes="16x16">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="header">
+        <div id="lives"></div>
+        <div id="highscore"></div>
+        <div id="points"></div>
+    </div>
+    <div id="playField">
+        <div id="pacman"><img src="img/pac-man.gif"></div>
+        <div id="blinky"><img src="img/blinkyRight.gif"></div>
+    </div>
+    <div id="footer">
+        <div id="wasd"></div>
+        <div id="esc"></div>
+    </div>
+
+    <button id="retry" onclick="youRetry()">START</button>
+    <button id="pause" onclick="youPause()">PAUSED</button>
+
+    <script src="js/player.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/environment.js"></script>
+    <script src="js/i20dobmic_pac-man.js"></script>
+</body>
+
+<style>
+    body{
+        margin: 0;
+        background-color: black;
+        font-family: 'VT323', monospace;
+    }
+
+    #header, #footer{
+        position: absolute;
+        color: rgb(255, 255, 255);
+        font-size: 35px;
+    }
+
+    #lives, #highscore, #points, #wasd, #esc, img{
+        position: absolute;
+    }
+
+    #playField{
+        position: relative;
+        background-color: black;
+        border-color: rgb(0, 0, 255);
+        border-style: solid;
+        border-width: 5px;
+    }
+
+    #pacman{
+        position: absolute;
+        background: rgb(255, 255, 0);
+        border-radius: 100px;
+        z-index: 2;
+    }
+
+    #blinky{
+        position: absolute;
+        background: rgb(255, 0, 0);
+        border-radius: 100px;
+        z-index: 1;
+    }
+
+    #pause{
+        visibility: hidden;
+    }
+
+    .pellet{
+        position: absolute;
+        background: rgb(255, 255, 160);
+        border-radius: 100px;
+    }
+
+    .superPellet{
+        position: absolute;
+        background: rgb(255, 255, 160);
+        border-radius: 100px;
+    }
+
+    .wall{
+        position: absolute;
+        background: rgb(0, 0, 255);
+    }
+
+    button{
+        position: absolute;
+        font-family: 'VT323', monospace;
+        color: white;
+        background-color: black;
+        border-color: white;
+        border-width: 5px;
+        border-radius: 25px;
+        z-index: 2;
+    }
+</style>
+
+</html>

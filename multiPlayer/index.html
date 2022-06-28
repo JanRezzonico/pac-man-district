@@ -1,0 +1,842 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+    <!-- data creazione: 27.05.2022  data ultima modifica: 15.06.2022-->
+    <!-- O.S. = Windows/Linux/MAC Browser = opera gx -->
+    <!-- Pac-Man -->
+    <title>Pac-Man</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Michael Dobeson">
+    <meta name="keywords" content="HTML/CSS/JavaScript/Pac-Man">
+    <meta name="author" content="Michael.Dobeson">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/pac-man.gif" type="image" sizes="16x16">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --maincolor: rgb(209, 144, 4);
+            --accentcolor: rgb(238, 214, 0); 
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Kalam&family=Shadows+Into+Light+Two&display=swap');
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        body {
+            background-color: var(--maincolor);
+            overflow: hidden;
+            font-family: 'Kalam', cursive;
+            background-image: url('data:image/png;base64,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');
+            background-repeat: repeat;
+            /* font-family: "Comic Sans MS", "Comic Sans", cursive; */
+        }
+
+        #login {
+            -webkit-animation: fadein 1s;
+            /* Safari, Chrome and Opera > 12.1 */
+            -moz-animation: fadein 1s;
+            /* Firefox < 16 */
+            -o-animation: fadein 1s;
+            /* Opera < 12.1 */
+            animation: fadein 1s;
+        }
+
+        #chat {
+            background-color: rgb(28, 83, 146);
+            width: 210px;
+            border: 2px solid;
+        }
+
+        #players {
+            background-color: rgb(28, 83, 146);
+            width: 235px;
+            border: 2px solid;
+            padding: 5px;
+            margin: 0;
+        }
+
+        #players>li {
+            list-style: none;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid #111;
+            border-radius: 3px;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+        }
+
+        .colors {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .color {
+            width: 25px;
+            height: 25px;
+        }
+
+        .word {
+            padding: 0.4%;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: table;
+            margin: 0 auto;
+            margin-bottom: 0.4%;
+            background-color: white;
+            border-radius: 5%;
+        }
+
+        #word {
+            letter-spacing: 3px;
+        }
+
+        .brushes {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .brush {
+            border-radius: 50%;
+            background-color: black;
+        }
+
+        .brushcontainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 10%;
+            margin: 0.4%;
+        }
+
+        #messages>li {
+            font-size: small;
+            font-family: "Comic Sans MS", "Comic Sans", cursive;
+            padding-left: 2px;
+            list-style: none;
+            max-width: 200px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 1px solid #111;
+            border-radius: 3px;
+            overflow: hidden;
+            height: fit-content;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            hyphens: auto;
+            margin-bottom: 5px;
+        }
+
+        #messages {
+            height: 600px;
+            min-height: 600px;
+            width: 200px;
+            overflow-y: scroll;
+            overflow-x: auto;
+            padding: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .loginform {
+            border-radius: 2%;
+            margin-top: 12vh;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            background-color: var(--maincolor);
+            padding: 45px;
+            text-align: center;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+
+        .loginform input {
+            outline: 0;
+            background: #f2f2f2;
+            width: 100%;
+            border: 0;
+            margin: 0 0 15px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .loginform input[type=button] {
+            text-transform: uppercase;
+            outline: 0;
+            background: var(--accentcolor);
+            width: 100%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            -webkit-transition: all 0.3 ease;
+            transition: all 0.3 ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+
+        .topnav {
+            position: relative;
+            overflow: hidden;
+            background-color: #333;
+            margin-bottom: 10px;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+
+        .topnav a.active {
+            background-color: #06F;
+            color: white;
+            font-size: 2em;
+        }
+
+        .topnav-centered a {
+            float: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .topnav-right {
+            float: right;
+        }
+
+        .topnavbutton {
+            float: left;
+            color: #f2f2f2;
+            background-color: #333;
+            text-align: center;
+            padding: 14px 16px;
+            border: none;
+        }
+
+        .topnavbutton:hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        /* Responsive navigation menu (for mobile devices) */
+        @media screen and (max-width: 800px) {
+
+            .topnav a,
+            .topnav-right {
+                float: none;
+                display: block;
+            }
+
+            .topnav-centered a {
+                position: relative;
+                top: 0;
+                left: 0;
+                transform: none;
+            }
+        }
+
+        #chooseword {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            padding-top: 0.5%;
+            padding-bottom: 0.5%;
+            margin-top: 0.5%;
+            margin-bottom: 0.5%;
+            overflow: hidden;
+            background-color: #333;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #chooseword li {
+            float: left;
+            width: 33%;
+        }
+
+        #chooseword li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #chooseword li a:hover {
+            background-color: rgb(215, 215, 215);
+            color: #111;
+        }
+
+        #choosewordtitle {
+            text-align: center;
+        }
+
+        #form {
+            width: 210px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #input {
+            width: 150px;
+        }
+
+        #scoreboard {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #scoreboardlist>li {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            padding-top: 0.5%;
+            padding-bottom: 0.5%;
+            margin-top: 0.5%;
+            margin-bottom: 0.5%;
+            overflow: hidden;
+            background-color: #333;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            min-width: fit-content;
+            width: 50%;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .scoreboardtitle {
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .scoreboardtitle span {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .styled-table thead tr {
+            background-color: #333;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            text-align: center;
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #333;
+        }
+
+        .styled-table tbody tr :hover {
+            font-weight: bold;
+            color: #009879;
+        }
+
+        .maintitle {
+            text-align: center;
+            color: #ffffff;
+            font-size: 3em;
+        }
+
+        .maintitle span {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #ffffff;
+            font-size: medium;
+        }
+
+        .subtitle span {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .slide-in {
+            z-index: 10;
+            /* to position it in front of the other content */
+            position: absolute;
+            overflow: hidden;
+            /* to prevent scrollbar appearing */
+        }
+
+        .slide-in.from-right .popup {
+            transform: translateX(100%);
+            -webkit-transform: translateX(100%);
+        }
+
+        .slide-in.from-right {
+            right: 0;
+        }
+
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            opacity: 0.6;
+        }
+
+        .close:hover {
+            opacity: 1;
+        }
+
+        .close:before,
+        .close:after {
+            position: absolute;
+            right: 15px;
+            top: 0;
+            content: ' ';
+            height: 33px;
+            width: 2px;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .close:before {
+            transform: rotate(45deg);
+        }
+
+        .close:after {
+            transform: rotate(-45deg);
+        }
+
+        .popup-content {
+            margin: 10px;
+            padding: 20px;
+            width: 300px;
+            height: 70px;
+            background-color: #ffffff;
+            opacity: 0.8;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #slider {
+            position: absolute;
+            z-index: 1;
+            right: 0;
+            bottom: 0;
+            margin: 20px 10px;
+            width: 400px;
+            height: 130px;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .slide-in {
+            animation: slide-in 1s forwards;
+            -webkit-animation: slide-in 0.8s forwards;
+        }
+
+        .slide-out {
+            animation: slide-in 1s forwards;
+            -webkit-animation: slide-out 0.8s forwards;
+        }
+
+        .gtfo {
+            animation: gtfo 0.1s forwards;
+            -webkit-animation: gtfo 0.1s forwards;
+        }
+
+        @keyframes slide-in {
+            0% {
+                transform: translateY(200%);
+            }
+
+            100% {
+                transform: translateY(0%);
+            }
+        }
+
+        @-webkit-keyframes slide-in {
+            0% {
+                transform: translateY(200%);
+            }
+
+            100% {
+                -webkit-transform: translateY(0%);
+            }
+        }
+
+        @keyframes slide-out {
+            0% {
+                transform: translateY(0%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
+        }
+
+        @-webkit-keyframes slide-out {
+            0% {
+                -webkit-transform: translateY(0%);
+            }
+
+            100% {
+                -webkit-transform: translateY(200%);
+            }
+        }
+
+        @keyframes gtfo {
+            0% {
+                transform: translateY(200%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
+        }
+
+        @-webkit-keyframes gtfo {
+            0% {
+                transform: translateY(200%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
+        }
+
+        /* private / public slider*/
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 13%;
+            padding: 15px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ca2222;
+            -webkit-transition: .4s;
+            transition: .4s;
+            font-size: 14px;
+            box-shadow: 0 0 20px 0 rgb(0 0 0 / 20%), 0 5px 5px 0 rgb(0 0 0 / 24%);
+        }
+
+        .slider:before {
+            display: none;
+        }
+
+        input:checked+.slider {
+            background-color: #2ab934;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(55px);
+        }
+
+        .slider:after {
+            content: 'PRIVATE';
+        }
+
+        input:checked+.slider:after {
+            content: 'PUBLIC';
+        }
+
+        #createRoom {
+            width: 83%;
+        }
+
+        #private {
+            width: 13%;
+        }
+
+        #publicrooms {
+            border-radius: 5px;
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            width: 50%;
+            flex-direction: column;
+            align-items: center;
+            border-collapse: collapse;
+        }
+
+        #publicrooms td,
+        #publicrooms th {
+            background-color: rgb(209, 144, 4);
+        }
+
+        #publicrooms th {
+            text-align: center;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: rgb(209, 144, 4);;
+            color: white;
+        }
+
+        .mfbutton {
+            outline: 0;
+            box-sizing: border-box;
+            text-transform: uppercase;
+            background: var(--accentcolor);
+            width: 90%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            -webkit-transition: all 0.3 ease;
+            transition: all 0.3 ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+
+        .mfsmallbutton {
+            outline: 0;
+            margin: 10px;
+            box-sizing: border-box;
+            text-transform: uppercase;
+            background: var(--accentcolor);
+            width: 90%;
+            border: 0;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            -webkit-transition: all 0.3 ease;
+            transition: all 0.3 ease;
+            cursor: pointer;
+            position: inherit;
+            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+        }
+    </style>
+</head>
+
+<body>
+    <section id="login">
+        <!-- Where u can create a room or join another-->
+        <h1 class="maintitle">
+            <span>
+                Pac-Man District
+            </span>
+        </h1>
+        <h4 class="subtitle">
+            <span>
+                by Michael, Idro and Jan
+            </span>
+            </h2>
+            <form name="login" class="loginform">
+                <input type="text" name="username" placeholder="Username">
+                <input type="number" name="roomcode" placeholder="Room code (ignored if you create a room)">
+                <input type="button" value="CREATE ROOM" id="createRoom">
+                <input type="button" value="PUBLIC" id="private">
+                <input type="button" value="JOIN ROOM" id="joinroom">
+            </form>
+            <table id="publicrooms">
+                <tr>
+                    <th>Room code</th>
+                    <th>Players</th>
+                    <th><input class="mfbutton" type="button" value="REFRESH" id="refreshrooms"></th>
+                </tr>
+            </table>
+    </section>
+    <section id="lobby" style="display: none;">
+        <!-- Where u can choose your role and wait for the host to start-->
+        <input type="button" value="LEAVE ROOM" id="leaveroom">
+        <input type="button" value="start game" id="startgamebutton">
+    </section>
+    <section id="game" style="display: none;">
+        <!-- The actual game -->
+        <div id="header">
+            <div id="lives"></div>
+            <div id="highscore"></div>
+            <div id="points"></div>
+        </div>
+        <div id="playField">
+            <div id="pacman"><img src="img/pac-man.gif"></div>
+            <div id="blinky"><img src="img/blinkyRight.gif"></div>
+        </div>
+        <div id="footer">
+            <div id="wasd"></div>
+            <div id="esc"></div>
+        </div>
+
+        <button id="retry" onclick="youRetry()">START</button>
+        <button id="pause" onclick="youPause()">PAUSED</button>
+
+    </section>
+    <section id="aftergame" style="display: none;">
+        <!-- where u go after a game ended -->
+        <input type="button" value="LEAVE ROOM" id="playagain">
+    </section>
+    <section id="mobile" style="display: none;">
+        <h1 class="maintitle">
+            <span>
+                This website does not work on mobile.
+            </span>
+        </h1>
+    </section>
+    <section id="error" style="display: none;">
+        <h1 class="maintitle">
+            <span>
+                Use a bigger window to play.
+            </span>
+        </h1>
+    </section>
+    <div id="slider" class="gtfo">
+        <a class="close" id="togglepopup"></a>
+        <p class="popup-content" id="popupmessage">Welcome to Pac-Man District</p>
+    </div>
+</body>
+
+<style>
+    body {
+        margin: 0;
+        background-color: black;
+        font-family: 'VT323', monospace;
+    }
+
+    #header,
+    #footer {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        font-size: 35px;
+    }
+
+    #lives,
+    #highscore,
+    #points,
+    #wasd,
+    #esc,
+    img {
+        position: absolute;
+    }
+
+    #playField {
+        position: relative;
+        background-color: black;
+        border-color: rgb(0, 0, 255);
+        border-style: solid;
+        border-width: 5px;
+    }
+
+    #pacman {
+        position: absolute;
+        background: rgb(255, 255, 0);
+        border-radius: 100px;
+        z-index: 2;
+    }
+
+    #blinky {
+        position: absolute;
+        background: rgb(255, 0, 0);
+        border-radius: 100px;
+        z-index: 1;
+    }
+
+    #pause {
+        visibility: hidden;
+    }
+
+    .pellet {
+        position: absolute;
+        background: rgb(255, 255, 160);
+        border-radius: 100px;
+    }
+
+    .superPellet {
+        position: absolute;
+        background: rgb(255, 255, 160);
+        border-radius: 100px;
+    }
+
+    .wall {
+        position: absolute;
+        background: rgb(0, 0, 255);
+    }
+
+    button {
+        position: absolute;
+        font-family: 'VT323', monospace;
+        color: white;
+        background-color: black;
+        border-color: white;
+        border-width: 5px;
+        border-radius: 25px;
+        z-index: 2;
+    }
+</style>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/pcd_index.js"></script>
+<script src="js/player.js"></script>
+<script src="js/enemy.js"></script>
+<script src="js/environment.js"></script>
+<script src="js/i20dobmic_pac-man.js"></script>
+
+</html>

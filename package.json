@@ -1,0 +1,28 @@
+{
+  "name": "pac-man-district",
+  "version": "1.0.0",
+  "description": "It's pac-man but with a randomly generated maze (only for cool kids) and multiplayer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JanRezzonico/pac-man-district.git"
+  },
+  "keywords": [
+    "pac-man",
+    "maze",
+    "multiplayer"
+  ],
+  "author": "Michael Dobeson, Jan Rezzonico, Tommaso Castello",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JanRezzonico/pac-man-district/issues"
+  },
+  "homepage": "https://github.com/JanRezzonico/pac-man-district#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  }
+}
