@@ -22,7 +22,7 @@ class Player {
   constructor(name, socketId) {
     this.name = name;
     this.socketId = socketId;
-    this.pacman;
+    this.isPacman;
   }
 }
 
@@ -46,10 +46,12 @@ io.on('connection', (socket) => {
       } else if (roomMap[roomId].started) {
         socket.emit('alert', "game already started, wait for it to end");
       } else {
+        newplayer.isPacman = roomMap[roomId].players.length % 2 == 0;
         roomMap[roomId].players.push(newplayer);
         socket.join(String(roomId));
-        socket.emit('room joined', roomId);
-        io.in(String(roomId)).emit('player updated', roomMap[roomId].players);
+        socket.emit('room joined', roomId, roomMap[roomId].owner.name);
+        console.log("owner1", roomMap[roomId].owner.name)
+        io.in(roomId).emit('player updated', roomMap[roomId].players, roomMap[roomId].owner.name);
       }
     } else {
       socket.emit('alert', "room not found");
@@ -78,7 +80,7 @@ io.on('connection', (socket) => {
       console.log(user + " disconnected from room " + roomId);
       if (roomMap[roomId].players.some(player => player.name == user)) {
         roomMap[roomId].players.splice(roomMap[roomId].players.indexOf(user), 1);
-        io.in(roomId).emit('player updated', roomMap[roomId].players);
+        io.in(roomId).emit('player updated', roomMap[roomId].players, roomMap[roomId].owner.name);
         if (roomMap[roomId].players.length == 0) {
           console.log("room " + roomId + " is empty, deleting");
           delete roomMap[roomId];
@@ -94,7 +96,7 @@ io.on('connection', (socket) => {
         let username = roomMap[room].players.find(player => player.socketId == socket.id).name;
         console.log(username + " disconnected from room " + room);
         roomMap[room].players.splice(roomMap[room].players.indexOf(username), 1);
-        io.in(room).emit('player updated', roomMap[room].players);
+        io.in(room).emit('player updated', roomMap[room].players, roomMap[room].owner.name);
         if (roomMap[room].players.length == 0) {
           console.log("room " + room + " is empty, deleting");
           delete roomMap[room];
@@ -127,6 +129,15 @@ io.on('connection', (socket) => {
     socket.emit('public rooms', privateRooms);
   });
 
+  socket.on('change role', (username ,index, roomId) => {
+    if(username == roomMap[roomId].owner.name || username == roomMap[roomId].players[index].name){
+      roomMap[roomId].players[index].isPacman = !roomMap[roomId].players[index].isPacman;
+      io.in(roomId).emit('player updated', roomMap[roomId].players, roomMap[roomId].owner.name);
+    }else{
+      socket.emit('alert', "Sorry, you cant do that");
+      return;
+    }
+  });
   // fine gestione stanze 
   socket.on('chat message', msg => {
     io.emit('chat message', msg);

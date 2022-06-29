@@ -46,23 +46,32 @@ window.addEventListener('resize', function () {
 socket.on('alert', function (msg) {
     showPopup(msg);
 });
-socket.on('player updated', function (players) {
-    var playerslist = document.getElementById("players");
-    playerslist.innerHTML = "";
+socket.on('player updated', function (players, owner) {
+    var pacmans = document.getElementById("pacmans");
+    var ghosts = document.getElementById("ghosts");
+    pacmans.innerHTML = "";
+    ghosts.innerHTML = "";
     for (var i = 0; i < players.length; i++) {
         var player = document.createElement("li");
-        player.innerText = players[i].name + " - " + players[i].points;
-        playerslist.appendChild(player);
+        player.innerText = players[i].name;
+        console.log(username, owner);
+        if(players[i].name == username || username == owner){
+            var button = document.createElement("button");
+            button.dataset.index = i;
+            button.innerText = "change role";
+            button.style.float = "right";
+            button.style.position = "relative";
+            button.addEventListener('click', changeRole);
+            player.appendChild(button);
+        }
+        if(players[i].isPacman){
+            pacmans.appendChild(player);
+        }else{
+            ghosts.appendChild(player);
+        }
     }
 });
-socket.on('chat message', function (msgObj) {
-    console.log(msgObj.msg);
-    var item = document.createElement('li');
-    item.textContent = msgObj.msg;
-    item.style.color = msgObj.color;
-    messages.appendChild(item);
-    messages.scrollTo(0, messages.scrollHeight);
-});
+
 socket.on('public rooms', function (rooms) {
     console.log(rooms);
     let container = document.getElementById("publicrooms");
@@ -88,43 +97,7 @@ socket.on('public rooms', function (rooms) {
         container.appendChild(row);
     }
 });
-socket.on('words', async function (words) {
-    dontDraw = true;
-    document.getElementById("cw1").innerText = words[0];
-    document.getElementById("cw2").innerText = words[1];
-    document.getElementById("cw3").innerText = words[2];
-    document.getElementById('input').disabled = true;
-    await sleep(500);
-    let op = 0;
-    document.getElementById("choosewordcontainer").style.opacity = op;
-    document.getElementById("choosewordcontainer").style.visibility = "visible";
-    let timer = setInterval(function () {
-        op += 0.05;
-        document.getElementById("choosewordcontainer").style.opacity = op;
-        if (op >= 1) {
-            clearInterval(timer);
-        }
-    }, 50);
 
-});
-socket.on('timer', function (data) {
-    console.log(data.countdown);
-    document.getElementById('time').innerText = data.countdown;
-});
-socket.on('current drawer', function (drawer) {
-    currentDrawer = drawer;
-    document.getElementById("drawer").innerText = drawer;
-});
-socket.on('image', function (image) {
-    console.log("received image " + image.name);
-    let container = document.getElementById("images");
-    let img = document.createElement("img");
-    img.src = image.data;
-    img.onclick = function () {
-        save(image.data, image.name);
-    }
-    container.appendChild(img);
-});
 socket.on('scoreboard', function (obj) {
     console.log(obj);
     console.log(images);
@@ -147,20 +120,7 @@ socket.on('scoreboard', function (obj) {
     }
     table.appendChild(tbody);
 });
-socket.on('full word for drawer', function (word) {
-    document.getElementById('word').innerText = word;
-});
-socket.on('word hint', function (word) {
-    if (currentDrawer == username || guessed) {
-        return;
-    }
-    document.getElementById('word').innerText = word;
-});
-socket.on('guessed correctly', function (word) {
-    document.getElementById('word').innerText = word;
-    document.getElementById('input').disabled = true;
-    guessed = true;
-});
+
 socket.on('game started', function () {
     document.getElementById('startgamebutton').style.display = 'none';
 });
@@ -170,75 +130,23 @@ socket.on('created room', function (roomId) {
     console.log("created room " + roomId);
     socket.emit('join room', roomId, username);
 });
-socket.on('room joined', function (roomId) {
+socket.on('room joined', function (roomId, owner) {
     room = roomId;
     console.log("joined room " + roomId);
     document.getElementById("login").style.display = "none";
     document.getElementById("lobby").style.display = "block";
-    document.getElementById("room").innerText = "Room " + roomId;
+    document.getElementById("room").innerText = "Room: " + roomId;
+    document.getElementById("host").innerText = "Host: " + owner;
 });
 socket.on('room destroyed', function () {
     window.location.reload();
 });
-//#endregion
-//#region Drawing
-socket.on('draw canvas', function (data) {
-    var ctx = document.getElementById("can").getContext("2d");
-    switch (data.type) {
-        case 'erase':
-            let tmp = ctx.fillStyle;
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = tmp;
-            break;
-        case 'fill':
-            ctx.fillStyle = data.color;
-            ctx.fillRect(0, 0, w, h);
-            break;
-        case 'draw':
-            ctx.beginPath();
-            ctx.lineCap = "round";
-            ctx.strokeStyle = data.color;
-            ctx.lineWidth = data.size;
-            ctx.lineJoin = "round";
-            ctx.moveTo(data.x, data.y);
-            ctx.lineTo(data.x1, data.y1);
-            ctx.stroke();
-            break;
-    }
+
+socket.on('disconnect', function () {
+    leaveRoom();
 });
 //#endregion
-socket.on('time up', function (word) {
-    document.getElementById('time').innerText = "Time's up!";
-    document.getElementById('word').innerText = word;
-    currentDrawer = ""; //prevents drawing for everyone
-    document.getElementById('input').disabled = false;
-    guessed = false;
-    socket.emit('canvas data send',
-        document.getElementById('can').toDataURL("image/jpg"),
-        room);
-    socket.emit('client canvas update', {
-        x: currX,
-        y: currY,
-        x1: prevX,
-        y1: prevY,
-        color: selectedColor,
-        size: brushSize,
-        room: String(room),
-        type: "erase"
-    });
-    let tmp = ctx.fillStyle;
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = tmp;
-});
-socket.on('images downloaded', function (images) {
-    console.log(images);
-    for (const img of images) {
-        save(img.data, img.name);
-    }
-});
-//#endregion
+
 //#region Ingame UI functions
 function leaveRoom() {
     socket.emit('leave room', room);
@@ -320,7 +228,11 @@ window.addEventListener('resize', function () {
     }
 });
 //#endregion
-//#region Login section functions
+//#region Login section functions$
+function changeRole(){
+    socket.emit("change role",username ,this.dataset.index, room);
+}
+
 function togglePublic() {
     if (public) {
         public = false;
